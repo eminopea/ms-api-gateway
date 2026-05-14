@@ -40,14 +40,13 @@ pipeline {
             when {
                 branch 'develop'
             }
+            
             steps {
-                sh '''
-                mvn sonar:sonar \
-                -Dsonar.projectKey=ms-api-gateway \
-                -Dsonar.host.url=http://sonarqube:9000 \
-                -Dsonar.login=$SONAR_TOKEN
-                '''
+                withSonarQubeEnv('sonar-local') {
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=ms-api-gateway'
+                }
             }
+
         }
 
         stage('Deploy DEV') {

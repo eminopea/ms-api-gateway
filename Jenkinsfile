@@ -37,12 +37,16 @@ pipeline {
         }
  
         stage('SonarQube') {
+            anyof{
+                branch 'develop'
+                branch 'qa'
+                branch 'main'
+            }
             steps {
                 withSonarQubeEnv('sonar-local') {
                     sh """
                     mvn clean verify sonar:sonar \
                     -Dsonar.projectKey=ms-api-gateway \
-                    -Dsonar.branch.name=${env.BRANCH_NAME} \
                     -Dsonar.login=$SONAR_TOKEN
                     """
                 }

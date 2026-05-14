@@ -25,17 +25,12 @@ pipeline {
         }
 
         stage('Test') {
+            // colocar con junit5
             steps {
                 sh 'mvn test'
             }
         }
-
-        stage('Package') {
-            steps {
-                sh 'mvn package -DskipTests'
-            }
-        }
-
+ 
         stage('SonarQube') {
             steps {
                 withSonarQubeEnv('sonar-local') {
@@ -46,6 +41,12 @@ pipeline {
                     -Dsonar.login=$SONAR_TOKEN
                     """
                 }
+            }
+        }
+        
+        stage('Package') {
+            steps {
+                sh 'mvn package -DskipTests'
             }
         }
 

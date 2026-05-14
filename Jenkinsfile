@@ -24,11 +24,16 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            // colocar con junit5
+        stage('Test') { 
             steps {
                 sh 'mvn test'
             }
+            
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            } 
         }
  
         stage('SonarQube') {
@@ -43,7 +48,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Package') {
             steps {
                 sh 'mvn package -DskipTests'

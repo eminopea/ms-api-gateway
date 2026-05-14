@@ -24,29 +24,39 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test') { 
             steps {
                 sh 'mvn test'
             }
+            
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            } 
         }
+ 
+       stage('SonarQube') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'qa'
+                    branch 'main'
+                }
+            }
+            steps {
+                withSonarQubeEnv('sonar-local') {
+                    sh '''
+                    mvn clean verify sonar:sonar \
+                    -Dsonar.projectKey=ms-api-gateway
+                    '''
+                }
+            }
+        } 
 
         stage('Package') {
             steps {
                 sh 'mvn package -DskipTests'
-            }
-        }
-
-        stage('SonarQube') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                sh '''
-                mvn sonar:sonar \
-                -Dsonar.projectKey=ms-api-gateway \
-                -Dsonar.host.url=http://sonarqube:9000 \
-                -Dsonar.login=$SONAR_TOKEN
-                '''
             }
         }
 

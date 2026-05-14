@@ -12,10 +12,12 @@ import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Configuration
 @EnableWebFluxSecurity
+@Slf4j
 public class SecurityConfig {
 
     @Value("${jwt.secret}")
@@ -24,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(
             ServerHttpSecurity http) {
-
+        log.info("SecurityConfig: Configuring security web filter chain");
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
 

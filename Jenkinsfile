@@ -37,16 +37,16 @@ pipeline {
         }
 
         stage('SonarQube') {
-            // when {
-            //     branch 'develop'
-            // }
-            
             steps {
                 withSonarQubeEnv('sonar-local') {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=ms-api-gateway'
+                    sh """
+                    mvn clean verify sonar:sonar \
+                    -Dsonar.projectKey=ms-api-gateway \
+                    -Dsonar.branch.name=${env.BRANCH_NAME} \
+                    -Dsonar.login=$SONAR_TOKEN
+                    """
                 }
             }
-
         }
 
         stage('Deploy DEV') {

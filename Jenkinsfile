@@ -37,10 +37,12 @@ pipeline {
         }
  
         stage('SonarQube') {
-            anyof{
-                branch 'develop'
-                branch 'qa'
-                branch 'main'
+            when{
+                anyof {
+                    branch 'develop'
+                    branch 'qa'
+                    branch 'main'
+                } 
             }
             steps {
                 withSonarQubeEnv('sonar-local') {

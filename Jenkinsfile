@@ -37,9 +37,9 @@ pipeline {
         }
 
         stage('SonarQube') {
-            when {
-                branch 'develop'
-            }
+            // when {
+            //     branch 'develop'
+            // }
             
             steps {
                 withSonarQubeEnv('sonar-local') {

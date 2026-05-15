@@ -15,7 +15,7 @@ spring:
             - Path=/auth/**
 
         - id: demo
-          uri: http://demo:7080
+          uri: http://ms-client:7080
           predicates:
             - Path=/api/v1/**
 
